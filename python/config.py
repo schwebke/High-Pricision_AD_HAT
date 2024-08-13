@@ -121,7 +121,7 @@ class JetsonNano:
         self.GPIO.cleanup()
         
         
-if os.path.exists('/sys/bus/platform/drivers/gpiomem-bcm2835'):
+if os.path.exists('/usr/bin/raspi-config'):
     implementation = RaspberryPi()
 else:
     implementation = JetsonNano()
