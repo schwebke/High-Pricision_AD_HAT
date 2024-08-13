@@ -58,8 +58,9 @@ try:
         ADC_Value = []
         isSingleChannel = True
         if isSingleChannel:
+            ADC.ADS1263_SetChannal(0)
             while(1):
-                ADC_Value.append(ADC.ADS1263_GetChannalValue(0))
+                ADC_Value.append(ADC.ADS1263_Read_ADC_Data())
                 if len(ADC_Value) == 5000:
                     time_end = time.time()
                     print(time_start, time_end)
