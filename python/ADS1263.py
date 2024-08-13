@@ -387,19 +387,19 @@ class ADS1263:
         
     # Read ADC data
     def ADS1263_Read_ADC_Data(self):
-        config.digital_write(self.cs_pin, GPIO.LOW)#cs  0
         while(1):
+            config.digital_write(self.cs_pin, GPIO.LOW)#cs  0
             config.spi_writebyte([ADS1263_CMD['CMD_RDATA1']])
             # config.delay_ms(10)
-            if(config.spi_readbytes(1)[0] & 0x40 != 0):
+            buf = config.spi_readbytes(6)
+            config.digital_write(self.cs_pin, GPIO.HIGH)#cs 1
+            if(buf[0] & 0x40 != 0):
                 break
-        buf = config.spi_readbytes(5)
-        config.digital_write(self.cs_pin, GPIO.HIGH)#cs 1
-        read  = (buf[0]<<24) & 0xff000000
-        read |= (buf[1]<<16) & 0xff0000
-        read |= (buf[2]<<8) & 0xff00
-        read |= (buf[3]) & 0xff
-        CRC = buf[4]
+        read  = (buf[1]<<24) & 0xff000000
+        read |= (buf[2]<<16) & 0xff0000
+        read |= (buf[3]<<8) & 0xff00
+        read |= (buf[4]) & 0xff
+        CRC = buf[5]
         # print(read, CRC)
         if(self.ADS1263_CheckSum(read, CRC) != 0):
             print("ADC1 data read error!")
